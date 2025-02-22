@@ -1,24 +1,38 @@
 import React from 'react';
 import ContactForm from '../components/ContactForm';
 import styled from 'styled-components';
-import { FaPhone, FaTwitter } from 'react-icons/fa';
+import { FaPhone, FaEnvelope } from 'react-icons/fa';
 
 const ContactContainer = styled.div`
   padding: 2rem;
   max-width: 800px;
-  margin: 0 auto;
+  margin: 2rem auto;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+`;
+
+const Heading = styled.h2`
+  text-align: center;
+  margin-bottom: 1rem;
+`;
+
+const Text = styled.p`
+  text-align: center;
+  margin-bottom: 2rem;
 `;
 
 const ContactDetails = styled.div`
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   margin-top: 2rem;
 `;
 
 const IconLink = styled.a`
   color: #1DA1F2;
-  font-size: 2rem;
+  font-size: 2.5rem;
   margin: 0 1rem;
+  transition: color 0.3s;
 
   &:hover {
     color: #0a8cd8;
@@ -28,15 +42,15 @@ const IconLink = styled.a`
 const Contact = () => {
   return (
     <ContactContainer>
-      <h2>Contact me</h2>
-      <p>Feel free to reach out to me through the form below:</p>
+      <Heading>Contact me</Heading>
+      <Text>Feel free to reach out to me through the form below:</Text>
       <ContactForm />
       <ContactDetails>
         <IconLink href="tel:+27677805891">
           <FaPhone />
         </IconLink>
-        <IconLink href="https://twitter.com/MundondoTapfuma" target="_blank" rel="noopener noreferrer">
-          <FaTwitter />
+        <IconLink href="mailto:tapfumamundondo@gmail.com">
+          <FaEnvelope />
         </IconLink>
       </ContactDetails>
     </ContactContainer>
