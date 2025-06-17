@@ -1,163 +1,83 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import styled, { keyframes } from 'styled-components';
+// src/components/Header.js
+import React, { useEffect } from 'react';
 
-// Keyframes for animations
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
-
-const logoAnimation = keyframes`
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-  }
-`;
-
-const HeaderContainer = styled.header`
-  background: linear-gradient(135deg, #1e3c72, #2a5298);
-  font-family: 'Overpass', sans-serif;
-  padding: 1.5rem 2rem;
-  color: #fff;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-`;
-
-const Nav = styled.nav`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
-  
-  @media (max-width: 768px) {
-    flex-direction: column;
-    text-align: center;
-  }
-`;
-
-const Logo = styled.h1`
-  font-size: 1.8rem;
-  font-weight: bold;
-  letter-spacing: 1px;
-  margin: 0;
-  animation: ${logoAnimation} 2s infinite;
-  background: linear-gradient(135deg, #ffcc00, #ff6699);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-
-  @media (max-width: 768px) {
-    margin-bottom: 1rem;
-  }
-`;
-
-const NavLinks = styled.div`
-  display: flex;
-  gap: 2rem;
-  animation: ${fadeIn} 0.5s ease-in-out;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    gap: 1rem;
-    display: ${props => (props.open ? 'flex' : 'none')};
-    animation: ${fadeIn} 0.3s ease-in-out;
-  }
-`;
-
-const NavLink = styled(Link)`
-  font-family: 'Overpass', sans-serif;
-  color: #fff;
-  text-decoration: none;
-  font-size: 1.1rem;
-  font-weight: 500;
-  position: relative;
-  transition: color 0.3s ease, transform 0.3s ease;
-  background: linear-gradient(135deg, #ffcc00, #ff6699);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-
-  &:hover {
-    transform: translateY(-3px);
-  }
-
-  &:after {
-    content: '';
-    display: block;
-    height: 2px;
-    width: 0;
-    background: linear-gradient(135deg, #ffcc00, #ff6699);
-    transition: width 0.3s ease-in-out;
-    position: absolute;
-    left: 0;
-    bottom: -5px;
-  }
-
-  &:hover:after {
-    width: 100%;
-  }
-`;
-
-const ToggleButton = styled.button`
-  display: none;
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 1.5rem;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-  background: linear-gradient(135deg, #ffcc00, #ff6699);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-
-  &:hover {
-    transform: rotate(90deg);
-  }
-
-  @media (max-width: 768px) {
-    display: block;
-  }
-`;
-
-const Header = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-
+const Header = ({ darkMode, toggleDarkMode, mobileMenuOpen, setMobileMenuOpen }) => {
   useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
-  }, [menuOpen]);
+    const mobileLinks = document.querySelectorAll('#mobileMenu a');
+    const handleClick = () => setMobileMenuOpen(false);
+    
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', handleClick);
+    });
+    
+    return () => {
+      mobileLinks.forEach(link => {
+        link.removeEventListener('click', handleClick);
+      });
+    };
+  }, [setMobileMenuOpen]);
 
   return (
-    <HeaderContainer>
-      <Nav>
-        <Logo>Tapfuma</Logo>
-        <ToggleButton onClick={() => setMenuOpen(!menuOpen)}>
-          {menuOpen ? '✕' : '☰'}
-        </ToggleButton>
-        <NavLinks open={menuOpen}>
-          <NavLink to="/" onClick={() => setMenuOpen(false)}>Home</NavLink>
-          <NavLink to="/about" onClick={() => setMenuOpen(false)}>About</NavLink>
-          <NavLink to="/projects" onClick={() => setMenuOpen(false)}>Projects</NavLink>
-          <NavLink to="/contact" onClick={() => setMenuOpen(false)}>Contact</NavLink>
-        </NavLinks>
-      </Nav>
-    </HeaderContainer>
+    <header className="fixed w-full h-16 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md z-50 shadow-sm">
+      <div className="container mx-auto px-6 py-4">
+        <div className="flex justify-between items-center">
+          <a href="/" className="flex items-center space-x-3">
+            <img
+              src="/portfolio.png"
+              alt="Tapfuma Mundondo Logo"
+              className="w-40 h-auto"
+            />           
+          </a>
+          
+          <div className="flex items-center space-x-6">
+            <nav className="hidden md:flex space-x-8">
+              <a href="/" className="nav-link">Home</a>
+              <a href="/about" className="nav-link">About</a>
+              <a href="/projects" className="nav-link">Projects</a>
+              <a href="/skills" className="nav-link">Skills</a>
+              <a href="/contact" className="nav-link">Contact</a>
+            </nav>
+            
+            <div className="flex items-center space-x-4">
+              <div 
+                className={`dark-mode-toggle w-[50px] h-[26px] rounded-[13px] relative cursor-pointer transition ${
+                  darkMode ? 'bg-gray-600' : 'bg-gray-200'
+                }`}
+                onClick={toggleDarkMode}
+              >
+                <div className={`absolute w-5 h-5 rounded-full top-[3px] left-[3px] transition-transform ${
+                  darkMode 
+                    ? 'bg-gray-200 translate-x-[24px]' 
+                    : 'bg-white'
+                }`}></div>
+              </div>
+              
+              <button 
+                className="md:hidden focus:outline-none" 
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
+                <i className={`fas ${mobileMenuOpen ? 'fa-times' : 'fa-bars'} text-xl`}></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div 
+        id="mobileMenu"
+        className={`md:hidden bg-white dark:bg-gray-800 shadow-lg ${
+          mobileMenuOpen ? 'block' : 'hidden'
+        }`}
+      >
+        <div className="container mx-auto px-6 py-2 flex flex-col space-y-4 pb-6">
+          <a href="/" className="py-2 border-b border-gray-100 dark:border-gray-700">Home</a>
+          <a href="/about" className="py-2 border-b border-gray-100 dark:border-gray-700">About</a>
+          <a href="/projects" className="py-2 border-b border-gray-100 dark:border-gray-700">Projects</a>
+          <a href="/skills" className="py-2 border-b border-gray-100 dark:border-gray-700">Skills</a>
+          <a href="/contact" className="py-2">Contact</a>
+        </div>
+      </div>
+    </header>
   );
 };
 

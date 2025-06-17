@@ -1,199 +1,150 @@
-// src/pages/Projects.js
-import React from 'react';
-import styled, { keyframes, createGlobalStyle } from 'styled-components';
-import { useInView } from 'react-intersection-observer';
+import React, { useEffect, useRef } from 'react';
 
-// Global styles with Google Fonts
-const GlobalStyle = createGlobalStyle`
-  /* Importing Google Fonts */
-  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+const Projects = ({ darkMode }) => {
+  const sectionRef = useRef(null);
 
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Roboto', sans-serif;
-    overflow-x: hidden;
-  }
-`;
+  useEffect(() => {
+    if (!sectionRef.current) return;
 
-// Keyframes for animations
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('opacity-100', 'translate-y-0');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
 
-const scaleUp = keyframes`
-  from {
-    transform: scale(0.95);
-  }
-  to {
-    transform: scale(1);
-  }
-`;
+    const cards = sectionRef.current.querySelectorAll('.project-card');
+    cards.forEach((card) => observer.observe(card));
 
-// Container for the projects section
-const ProjectsContainer = styled.div`
-  padding: 4rem 2rem;
-  background: #f9f9f9;
-  min-height: 100vh;
-`;
+    return () => observer.disconnect();
+  }, []);
 
-// Title styling
-const Title = styled.h2`
-  text-align: center;
-  font-size: 2.5rem;
-  margin-bottom: 3rem;
-  color: #333;
-`;
+  const sectionClasses = `py-20 transition-colors duration-300 ${
+    darkMode ? 'bg-gray-900' : 'bg-gray-300'
+  }`;
+  const sectionTitleClass = 'text-white';
+  const projectTitleClass = 'text-white';
+  const descTextClass = darkMode ? 'text-gray-300' : 'text-zinc-900';
 
-// Responsive grid layout for project items
-const ProjectsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 2rem;
-`;
-
-// Styled project item
-const ProjectItem = styled.div`
-  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-  border-radius: 10px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  opacity: ${({ inView }) => (inView ? 1 : 0)};
-  transform: ${({ inView }) => (inView ? 'translateY(0)' : 'translateY(20px)')};
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-  animation: ${fadeIn} 0.6s ease-out, ${scaleUp} 0.6s ease-out;
-
-  &:hover {
-    transform: scale(1.02);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-  }
-
-  h3 {
-    margin-top: 0;
-    color: #222;
-    font-size: 1.8rem;
-  }
-
-  p {
-    font-size: 1rem;
-    color: #555;
-    margin: 1rem 0;
-  }
-`;
-
-// Updated styled image for each project
-const ProjectImage = styled.img`
-  width: 100%;
-  height: auto;
-  border-radius: 15px;
-  border: 2px solid #fff;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
-
-  &:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-    filter: brightness(1.05);
-  }
-`;
-
-// Styled button for GitHub link
-const ProjectButton = styled.a`
-  display: inline-block;
-  margin-top: 1rem;
-  padding: 0.5rem 1.2rem;
-  background-color: #333;
-  color: #fff;
-  text-decoration: none;
-  border-radius: 5px;
-  font-weight: 500;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-
-  img {
-    margin-right: 8px;
-    width: 20px;
-    height: 20px;
-    vertical-align: middle;
-  }
-
-  &:hover {
-    background-color: #555;
-    transform: translateY(-3px);
-  }
-`;
-
-const Projects = () => {
   const projects = [
     {
-      name: 'Book Connect App',
-      description: 'Utilized HTML5, CSS3 and Javascript to create a responsive and visually appealing design.',
-      image: '/book-connect.png',
-      netlify: 'https://thebookconnect.netlify.app',
-      github: 'https://github.com/Sancho566/TAPMUN568_FTO2403_A1_Tapfuma-Mundondo_DJS03.git',
+      title: 'AKAS Studio',
+      description:
+        'A sleek design and interior architecture showcase built with Tailwind CSS and vanilla JavaScript. Features a responsive portfolio gallery, smooth animations, and a contact form to book consultations.',
+      tags: ['html5', 'TailwindCSS', 'JavaScript'],
+      image: '/akasstudio.jpg',
+      demoUrl: 'https://akasstudio.co.za',
+      githubUrl: 'https://github.com/Sancho566/akas-studio'
     },
     {
-      name: 'CodeCraft Website',
-      description: 'Built with Tailwind CSS for a responsive and modern user interface.',
-      image: '/codecraft.png',
-      netlify: 'https://codecraft99.netlify.app',
-      github: 'https://github.com/Sancho566/codecraft.git',
+      title: 'PrimeFix',
+      description:
+        'An appliance repair service platform built with Tailwind CSS and JavaScript. Includes service booking, real‑time status updates, and an integrated contact form for quick technician scheduling.',
+      tags: ['html5', 'TailwindCSS', 'JavaScript'],
+      image: '/primefixlogo.png',
+      demoUrl: 'https://appliance-repairs.netlify.app',
+      githubUrl: 'https://github.com/Sancho566/Appliance-repairs'
     },
     {
-      name: 'AB Construction Website',
-      description: 'Used Tailwind CSS for responsive design and Javascript for interactity.',
-      image: '/abconstruction.png',
-      netlify: 'https://abconstruction.netlify.app',
-      github: 'https://github.com/Sancho566/abConcstructionCo.git',
-    },
+      title: 'Book Connect App',
+      description:
+        'An interactive Book Connect App that lets you search for and discover books via a public Books API. Built with semantic HTML5, vanilla JavaScript for fetching and rendering data, and styled with modern CSS3. Features include search-by-title or author, detailed book views, and responsive design for an optimal reading discovery experience.',
+      tags: ['html5', 'CSS3', 'API', 'JavaScript'],
+      image: 
+        'apple-touch-icon.png',
+      demoUrl: 'https://thebookconnect.netlify.app',
+      githubUrl: 'https://github.com/Sancho566/TAPMUN568_FTO2403_A1_Tapfuma-Mundondo_DJS03'
+    }
   ];
 
+  const tagColors = {
+    html5: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200',
+    TailwindCSS: 'bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200',
+    JavaScript: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
+    API: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+    CSS3: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+  };
+
   return (
-    <>
-      <GlobalStyle />
-      <ProjectsContainer>
-        <Title>My Projects</Title>
-        <ProjectsGrid>
-          {projects.map((project, index) => (
-            <InViewProject
-              key={index}
-              name={project.name}
-              description={project.description}
-              image={project.image}
-              netlify={project.netlify}
-              github={project.github}
-            />
+    <section id="projects" ref={sectionRef} className={sectionClasses}>
+      <div className="container mx-auto px-6 mt-16">
+        <div className="text-center mb-16">
+          <h2
+            className={`text-2xl md:text-3xl font-bold mb-4 ${sectionTitleClass}`}
+          >
+            My <span className="text-blue-500">Projects</span>
+          </h2>
+          <div className="w-20 h-1 bg-blue-500 mx-auto" />
+          <p
+            className={`mt-4 max-w-2xl mx-auto ${
+              darkMode ? 'text-gray-300' : 'text-zinc-900'
+            }`}
+          >
+            Here are some of my recent projects. Each one was carefully crafted
+            to solve specific problems and deliver exceptional user experiences.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {projects.map((project, idx) => (
+            <div
+              key={idx}
+              className="project-card opacity-0 transform translate-y-8 transition duration-700 rounded-xl overflow-hidden shadow-lg bg-white dark:bg-gray-800"
+            >
+              <div className="h-48 overflow-hidden">
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="w-full h-full object-cover transition duration-500 hover:scale-105"
+                  loading="lazy"
+                />
+              </div>
+              <div className="p-6">
+                <h3 className={`text-xl font-bold mb-2 ${projectTitleClass}`}>
+                  {project.title}
+                </h3>
+                <p className={`${descTextClass} mb-4`}>
+                  {project.description}
+                </p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {project.tags.map((tag, ti) => (
+                    <span
+                      key={ti}
+                      className={`${tagColors[tag] || ''} text-xs px-3 py-1 rounded-full`}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <div className="flex space-x-3">
+                  <a
+                    href={project.demoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 transition"
+                  >
+                    <i className="fas fa-external-link-alt" /> Live Demo
+                  </a>
+                  <a
+                    href={project.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100 transition"
+                  >
+                    <i className="fab fa-github" /> Code
+                  </a>
+                </div>
+              </div>
+            </div>
           ))}
-        </ProjectsGrid>
-      </ProjectsContainer>
-    </>
-  );
-};
-
-const InViewProject = ({ name, description, image, netlify, github }) => {
-  const { ref, inView } = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
-
-  return (
-    <ProjectItem ref={ref} inView={inView}>
-      <h3>{name}</h3>
-      <p>{description}</p>
-      <a href={netlify} target="_blank" rel="noopener noreferrer">
-        <ProjectImage src={image} alt={name} />
-      </a>
-      <ProjectButton href={github} target="_blank" rel="noopener noreferrer">
-        <img src="/github-6980894_1280(1).png" alt="GitHub" />
-        View on GitHub
-      </ProjectButton>
-    </ProjectItem>
+        </div>
+      </div>
+    </section>
   );
 };
 
