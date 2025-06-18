@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import Header from './components/Header';
 import Hero from './components/Hero';
 import About from './pages/About';
-import Projects from './pages/projects';
+import Projects from './pages/Projects';
 import Skills from './pages/Skills';
 import ContactForm from './pages/ContactForm';
 import Footer from './components/Footer';
 
 function AppContent({ darkMode, toggleDarkMode, mobileMenuOpen, setMobileMenuOpen }) {
-  const location = useLocation();
+ 
 
   return (
     <div
