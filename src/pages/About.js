@@ -90,7 +90,7 @@ const About = ({ darkMode }) => {
 
             <div className="flex space-x-4">
               <a
-                href="/"
+                href="/Tapfuma Arnold Mundondo.pdf"
                 className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium transition duration-300 flex items-center"
               >
                 <i className="fas fa-download mr-2"></i> Download CV
